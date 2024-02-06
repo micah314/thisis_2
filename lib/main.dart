@@ -151,3 +151,135 @@ class _MyHomePageState extends State<MyHomePage> {
     );      
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import 'package:flutter/material.dart';
+
+// void main() {
+//   runApp(MyApp());
+// }
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: MyHomePage(),
+//     );
+//   }
+// }
+
+// class MyHomePage extends StatefulWidget {
+//   @override
+//   _MyHomePageState createState() => _MyHomePageState();
+// }
+
+// class _MyHomePageState extends State<MyHomePage> {
+//   double circleRadius = 50.0;
+//   Offset circleCenter = Offset(0, 0);
+//   Offset center = Offset(0, 0);
+
+//   double _opacity = 1.0; //here
+
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Resizable Circle App'),
+//       ),
+//       body: Center(
+//         child: AnimatedOpacity( //here
+//           duration: const Duration( //here
+//             seconds: 3, //here
+//           ), //here
+//           opacity: _opacity, //here
+//           child: GestureDetector(
+//             onPanStart:(details){
+//               setState(() {
+//                 final RenderBox renderBox = context.findRenderObject() as RenderBox;
+//                 //circleCenter = Offset(200, 200); // as you gesture point the circle towards the point 200, 200 it gets smaller
+//                 final newCircleCenter = renderBox.globalToLocal(details.globalPosition);
+//                 Offset center = Offset(newCircleCenter.dx, newCircleCenter.dy - 200);
+//                 // circleCenter = newCircleCenter;
+//                 circleCenter = center;
+//               });
+//             },
+//             onPanUpdate: (details) {
+//               setState(() {
+//                 final RenderBox renderBox = context.findRenderObject() as RenderBox;
+//                 //circleCenter = Offset(200, 200); // as you gesture point the circle towards the point 200, 200 it gets smaller
+//                 final newCircleCenter = renderBox.globalToLocal(details.globalPosition);
+//                 final distance = _calculateDistance(newCircleCenter, circleCenter);
+//                 print(distance);
+//                 circleRadius = distance.clamp(10.0, 200.0);
+//                 center = Offset(newCircleCenter.dx, newCircleCenter.dy - 200);
+//                 circleCenter = newCircleCenter;
+//                 // circleCenter = center;
+//                 //_opacity = _opacity == 1 ? 0 : 1; //here
+//               });
+//             },
+//             child: CustomPaint(
+//               //painter: CirclePainter(center: circleCenter, radius: circleRadius),
+//               painter: CirclePainter(center: center, radius: circleRadius),
+//               size: Size(400, 400),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+
+//   double _calculateDistance(Offset a, Offset b) {
+//     return (a - b).distance * 2;
+//   }
+// }
+
+// class CirclePainter extends CustomPainter {
+//   final Offset center;
+//   final double radius;
+
+//   CirclePainter({required this.center, required this.radius});
+
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     Paint paint = Paint()
+//       ..color = Colors.blue
+//       ..style = PaintingStyle.stroke
+//       ..strokeWidth = 5.0;
+
+//     canvas.drawCircle(center, radius, paint);
+//   }
+
+//   @override
+//   bool shouldRepaint(CustomPainter oldDelegate) {
+//     return true;
+//   }
+// }
