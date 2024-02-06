@@ -14,10 +14,10 @@ class ThirdRoute extends StatefulWidget {
 // This is the actual function that's important
 class _ThirdRouteState extends State<ThirdRoute>{
   double circleRadius = 50.0;
-  Offset circleCenter = Offset(0, 0);
-  Offset center = Offset(0, 0);
+  Offset circleCenter = const Offset(0, 0);
+  Offset center = const Offset(0, 0);
 
-  double _opacity = 1.0; //here
+  final double _opacity = 1.0; //here
   
 
   void onPanStart(DragStartDetails details) {
@@ -67,7 +67,7 @@ class _ThirdRouteState extends State<ThirdRoute>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Resizable Circle App'),
+        title: const Text('Resizable Circle App'),
       ),
       body: Center(
         child: AnimatedOpacity( //here
@@ -82,7 +82,7 @@ class _ThirdRouteState extends State<ThirdRoute>{
             child: CustomPaint(
               //painter: CirclePainter(center: circleCenter, radius: circleRadius),
               painter: CirclePainter(center: center, radius: circleRadius),
-              size: Size(400, 400),
+              size: const Size(400, 400),
             ),
           ),
         ),
