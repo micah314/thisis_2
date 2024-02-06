@@ -1,4 +1,66 @@
+import 'package:flutter/material.dart';
+import 'package:shake/shake.dart';
 
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: ShakeCounterApp(),
+    );
+  }
+}
+
+class ShakeCounterApp extends StatefulWidget {
+  @override
+  _ShakeCounterAppState createState() => _ShakeCounterAppState();
+}
+
+class _ShakeCounterAppState extends State<ShakeCounterApp> {
+  int _counter = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    ShakeDetector.autoStart(onPhoneShake: () {
+      setState(() {
+        _counter++;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    //ShakeDetector.stopListening();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Shake Counter'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Shake your device to increment the counter:',
+            ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headline4,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 
 
