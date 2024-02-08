@@ -41,7 +41,7 @@ class _ThirdRouteState extends State<ThirdRoute>{
     double amp = delta.distance * 7 + 1;
     if (amp > 255) {amp = 255;}
     setState(() {
-      Vibration.vibrate(amplitude: amp.toInt(), duration: 50);
+      Vibration.vibrate(amplitude: amp.toInt(), duration: 50); //TRY TAKING OUT DURATION AND CALL VIBRATION.CANCEL ONPANEND
       final RenderBox renderBox = context.findRenderObject() as RenderBox;
       //circleCenter = Offset(200, 200); // as you gesture point the circle towards the point 200, 200 it gets smaller
       final newCircleCenter = renderBox.globalToLocal(details.globalPosition);

@@ -40,13 +40,13 @@ dependencies:
 
   adaptive_theme: ^3.4.1
 
-  # sensors_plus: ^4.0.2
+  sensors_plus: ^4.0.2
 
   flutter_drawing_board: ^0.5.0
 
-  shake: ^2.2.0
+  # shake: ^2.2.0
 
-  sensors_plus: ^1.4.1
+  # sensors_plus: ^1.4.1
 
 
 dev_dependencies:

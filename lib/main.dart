@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shake/shake.dart';
+import 'package:vibration/vibration.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,58 +10,358 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ShakeCounterApp(),
+      home: HomeScreen(),
     );
   }
 }
 
-class ShakeCounterApp extends StatefulWidget {
-  @override
-  _ShakeCounterAppState createState() => _ShakeCounterAppState();
-}
-
-class _ShakeCounterAppState extends State<ShakeCounterApp> {
-  int _counter = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    ShakeDetector.autoStart(onPhoneShake: () {
-      setState(() {
-        _counter++;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    //ShakeDetector.stopListening();
-    super.dispose();
-  }
-
+class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Shake Counter'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Shake your device to increment the counter:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+      body: VibratingSection(),
+    );
+  }
+}
+
+class VibratingSection extends StatefulWidget {
+  @override
+  _VibratingSectionState createState() => _VibratingSectionState();
+}
+
+enum DragDirection { up, down }
+
+class _VibratingSectionState extends State<VibratingSection> {
+  bool _hasVibrated = false;
+  DragDirection? _dragDirection;
+  double _boundary1 = 0;
+  double _boundary2 = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onVerticalDragDown: (details) => _startDrag(details),
+      onVerticalDragUpdate: (details) => _checkPosition(details),
+      onVerticalDragEnd: (_) => _resetState(),
+      child: Container(
+        color: _hasVibrated ? Colors.green : Colors.blue,
+        child: const Center(
+          child: Text(
+            'Drag your finger',
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
         ),
       ),
     );
   }
+
+  void _startDrag(DragDownDetails details) {
+    // Reset the state on the start of a new drag
+    _resetState();
+    // Get the boundaries based on the screen height
+    final screenHeight = MediaQuery.of(context).size.height;
+    _boundary1 = screenHeight / 3;
+    _boundary2 = screenHeight * 2 / 3;
+    // Determine the initial drag direction based on the start position
+    _dragDirection = details.localPosition.dy < _boundary1
+        ? DragDirection.down
+        : details.localPosition.dy < _boundary2
+            ? DragDirection.up
+            : DragDirection.down;
+  }
+
+  void _checkPosition(DragUpdateDetails details) {
+    // Get the current drag direction
+    final currentDragDirection = details.localPosition.dy < _boundary1
+        ? DragDirection.down
+        : details.localPosition.dy < _boundary2
+            ? DragDirection.up
+            : DragDirection.down;
+
+    if (_dragDirection != currentDragDirection) {
+      // The drag direction has changed, and we have crossed a boundary
+      setState(() {
+        _hasVibrated = true;
+        _vibrate();
+      });
+      // Update the drag direction
+      _dragDirection = currentDragDirection;
+    }
+  }
+
+  void _vibrate() async {
+    HapticFeedback.selectionClick();
+    //Vibration.vibrate(duration: 200);
+  }
+
+  void _resetState() {
+    setState(() {
+      _hasVibrated = false;
+      _dragDirection = null;
+    });
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import 'package:flutter/material.dart';
+// import 'package:sensors_plus/sensors_plus.dart';
+// import 'dart:async';
+// import 'dart:math';
+// import 'package:vibration/vibration.dart';
+
+// void main() {
+//   runApp(MyApp());
+// }
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: ShakeCounterApp(),
+//     );
+//   }
+// }
+
+// class ShakeCounterApp extends StatefulWidget {
+//   @override
+//   _ShakeCounterAppState createState() => _ShakeCounterAppState();
+// }
+
+// class _ShakeCounterAppState extends State<ShakeCounterApp> {
+// @override
+//   Widget build(BuildContext context) {
+    
+//     return Scaffold(
+//       appBar: AppBar(
+//         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+//       ),
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//           children: [
+//             Expanded(
+//               child: Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                 children: <Widget>[
+//                   FloatingActionButton(
+//                     onPressed: () {
+//                       final shakeDetector = ShakeDetector();
+//                       shakeDetector.stream.listen(
+//                             (UserAccelerometerEvent event) async {
+//                               print("shake detected!");
+//                             }
+//                       );
+//                     },
+//                     tooltip: 'Vibration',
+//                     heroTag: 'btn1',
+//                     child: const Icon(Icons.numbers)
+//                   ),
+//                 ]
+//               )
+//             )
+//           ]
+//         )
+//       )
+//     );
+//   }
+// }
+
+// class ShakeDetector {
+//   StreamSubscription<UserAccelerometerEvent>? accListener;
+//   DateTime? lastProcessedTime;
+//   StreamController<UserAccelerometerEvent> rmsStreamController =
+//       StreamController<UserAccelerometerEvent>();
+//   int shakeCount = 0;
+
+//   ShakeDetector() {
+//     bool isVibrating = false;
+//     accListener = userAccelerometerEventStream().listen(
+//       (UserAccelerometerEvent event) {
+//         // print(event.x);
+//         // print(event.y);
+//         // print(event.z);
+//         final rms = sqrt(event.x * event.x + event.y * event.y + event.z * event.z);
+//         // ideally add a semaphore here so that it can only call vibrate if it's not already vibrating
+//         if (rms > 10) {
+//           print(rms);
+//           if (!isVibrating){
+//             Vibration.vibrate();
+//           }
+//         } 
+//         else{
+//           Vibration.cancel();
+//         }
+//         // else {
+//         //   shakeCount = 0;
+//         // }
+//       },
+//       onError: (error) {
+//         // Logic to handle error
+//         // Needed for Android in case sensor is not available
+//       },
+//       cancelOnError: true,
+//     );
+//   }
+
+//   Stream<UserAccelerometerEvent> get stream => rmsStreamController.stream;
+
+//   void dispose() {
+//     accListener?.cancel();
+//     rmsStreamController.close();
+//   }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import 'package:flutter/material.dart';
+// import 'package:shake/shake.dart';
+
+// void main() {
+//   runApp(MyApp());
+// }
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: ShakeCounterApp(),
+//     );
+//   }
+// }
+
+// class ShakeCounterApp extends StatefulWidget {
+//   @override
+//   _ShakeCounterAppState createState() => _ShakeCounterAppState();
+// }
+
+// class _ShakeCounterAppState extends State<ShakeCounterApp> {
+//   int _counter = 0;
+
+//   accListener = userAccelerometerEventStream().listen(
+//       (UserAccelerometerEvent event) {
+//         final rms = sqrt(event.x * event.x + event.y * event.y + event.z * event.z);
+        
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     ShakeDetector.autoStart(onPhoneShake: () {
+//       setState(() {
+//         _counter++;
+//       });
+//     });
+//   }
+
+//   @override
+//   void dispose() {
+//     //ShakeDetector.stopListening();
+//     super.dispose();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Shake Counter'),
+//       ),
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: <Widget>[
+//             Text(
+//               'Shake your device to increment the counter:',
+//             ),
+//             Text(
+//               '$_counter',
+//               style: Theme.of(context).textTheme.headlineMedium,
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 
 
