@@ -18,11 +18,21 @@ class MyApp extends StatelessWidget {
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: VibratingSection(),
+    // return Scaffold(
+    //   body: VibratingSection(),
+    // );
+    return Stack(
+      children:[
+        VibratingSection(),
+        
+      ]
     );
   }
 }
+
+
+
+
 
 class VibratingSection extends StatefulWidget {
   @override
@@ -39,27 +49,47 @@ class _VibratingSectionState extends State<VibratingSection> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
     return GestureDetector(
-      onVerticalDragDown: (details) => _startDrag(details),
+      onVerticalDragDown: (details) => _startDrag(details, screenHeight),
       onVerticalDragUpdate: (details) => _checkPosition(details),
       onVerticalDragEnd: (_) => _resetState(),
       child: Container(
         color: _hasVibrated ? Colors.green : Colors.blue,
-        child: const Center(
-          child: Text(
-            'Drag your finger',
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          ),
-        ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: screenHeight / 3, 
+                child: GestureDetector(
+                  onTap: () {Vibration.vibrate(duration: 2);}
+                ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: screenHeight / 3, 
+                child: GestureDetector(
+                  onTap: () {Vibration.vibrate(duration: 20);}
+                ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: screenHeight / 3, 
+                child: GestureDetector(
+                  onTap: () {Vibration.vibrate(duration: 200);}
+                ),
+              ),
+            ]
+          )
       ),
     );
   }
 
-  void _startDrag(DragDownDetails details) {
+  void _startDrag(DragDownDetails details, double screenHeight) {
     // Reset the state on the start of a new drag
     _resetState();
     // Get the boundaries based on the screen height
-    final screenHeight = MediaQuery.of(context).size.height;
     _boundary1 = screenHeight / 3;
     _boundary2 = screenHeight * 2 / 3;
     // Determine the initial drag direction based on the start position
@@ -99,6 +129,54 @@ class _VibratingSectionState extends State<VibratingSection> {
       _hasVibrated = false;
       _dragDirection = null;
     });
+  }
+}
+
+
+
+
+
+
+
+class VibratingSection2 extends StatefulWidget {
+  @override
+  _VibratingSectionState2 createState() => _VibratingSectionState2();
+}
+
+class _VibratingSectionState2 extends State<VibratingSection> {
+  bool _hasVibrated = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GestureDetector(
+        onPanStart: (_) => _vibrateOnce(),
+        child: Container(
+          color: Colors.blue,
+          child: const Center(
+            child: Text(
+              'Touch to Vibrate',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _vibrateOnce() async {
+    if (!_hasVibrated) {
+      Vibration.vibrate(duration: 200);
+      setState(() {
+        _hasVibrated = true;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _hasVibrated = false;
   }
 }
 
