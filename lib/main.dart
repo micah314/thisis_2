@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:vibration/vibration.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_1/screen_three.dart';
+import 'package:flutter_application_1/screen_two.dart';
+import 'package:flutter_application_1/change_color.dart';
+import 'package:audioplayers/audioplayers.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -50,11 +55,11 @@ class _VibratingSectionState extends State<VibratingSection> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    return GestureDetector(
+    return GestureDetector (
       onVerticalDragDown: (details) => _startDrag(details, screenHeight),
       onVerticalDragUpdate: (details) => _checkPosition(details),
       onVerticalDragEnd: (_) => _resetState(),
-      child: Container(
+      child: Container (
         color: _hasVibrated ? Colors.green : Colors.blue,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -63,21 +68,46 @@ class _VibratingSectionState extends State<VibratingSection> {
                 width: MediaQuery.of(context).size.width,
                 height: screenHeight / 3, 
                 child: GestureDetector(
+                  onTap: () {
+                    final player = AudioPlayer();
+                    player.play(AssetSource('assets/c.mp3')); 
+
+                    //Vibration.vibrate(duration: 2);
+                  },
+                  // onDoubleTap: () {
+                  //     Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //       builder: (context) => const SecondRoute(
+                  //         title: "New Screen",
+                  //       )
+                  //     )
+                  //   );
+                  // }
+                ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: screenHeight / 3, 
+                child: GestureDetector(
+                  onTap: () {Vibration.vibrate(duration: 2);},
+                  onDoubleTap: () {
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ThirdRoute(
+                          title: "New Screen",
+                        )
+                      )
+                    );
+                  }
+                ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: screenHeight / 3, 
+                child: GestureDetector(
                   onTap: () {Vibration.vibrate(duration: 2);}
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: screenHeight / 3, 
-                child: GestureDetector(
-                  onTap: () {Vibration.vibrate(duration: 20);}
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: screenHeight / 3, 
-                child: GestureDetector(
-                  onTap: () {Vibration.vibrate(duration: 200);}
                 ),
               ),
             ]

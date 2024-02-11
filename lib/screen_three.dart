@@ -1,3 +1,8 @@
+/*
+1: Front page okay so far? Have to add high contrast words and different color changes
+2: I think my synchronization is off on the vibrating circle bit. Can you help me fix that?
+*/
+
 // import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:vibration/vibration.dart';
@@ -16,6 +21,7 @@ class _ThirdRouteState extends State<ThirdRoute>{
   double circleRadius = 50.0;
   Offset circleCenter = const Offset(0, 0);
   Offset center = const Offset(0, 0);
+  int currentVibration = 0;
 
   final double _opacity = 1.0; //here
   
@@ -31,6 +37,7 @@ class _ThirdRouteState extends State<ThirdRoute>{
       Offset center = Offset(newCircleCenter.dx, newCircleCenter.dy - 200);
       // circleCenter = newCircleCenter;
       circleCenter = center;
+      Vibration.vibrate(amplitude: 5);
     });
     print(point);
   }
@@ -41,23 +48,25 @@ class _ThirdRouteState extends State<ThirdRoute>{
     double amp = delta.distance * 7 + 1;
     if (amp > 255) {amp = 255;}
     setState(() {
-      Vibration.vibrate(amplitude: amp.toInt(), duration: 50); //TRY TAKING OUT DURATION AND CALL VIBRATION.CANCEL ONPANEND
+      Vibration.vibrate(amplitude: amp.toInt());
+      //Vibration.vibrate(amplitude: amp.toInt(), duration: 50); //TRY TAKING OUT DURATION AND CALL VIBRATION.CANCEL ONPANEND
       final RenderBox renderBox = context.findRenderObject() as RenderBox;
       //circleCenter = Offset(200, 200); // as you gesture point the circle towards the point 200, 200 it gets smaller
       final newCircleCenter = renderBox.globalToLocal(details.globalPosition);
       final distance = _calculateDistance(newCircleCenter, circleCenter);
-      print(distance);
+      //print(distance);
       circleRadius = distance.clamp(10.0, 200.0);
       center = Offset(newCircleCenter.dx, newCircleCenter.dy - 200);
       circleCenter = newCircleCenter;
       // circleCenter = center;
       //_opacity = _opacity == 1 ? 0 : 1; //here
     });
-    print(delta.distance);
-    print(amp.toInt());
+    // print(delta.distance);
+    // print(amp.toInt());
   }
 
   void onPanEnd(DragEndDetails details) {
+    Vibration.cancel();
     print('User ended drawing');
   }
 
