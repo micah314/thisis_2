@@ -70,7 +70,7 @@ class _VibratingSectionState extends State<VibratingSection> {
                 child: GestureDetector(
                   onTap: () {
                     final player = AudioPlayer();
-                    player.play(AssetSource('assets/c.mp3')); 
+                    player.play(AssetSource('c.mp3')); 
 
                     //Vibration.vibrate(duration: 2);
                   },
