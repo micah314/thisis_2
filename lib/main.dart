@@ -51,6 +51,7 @@ class _VibratingSectionState extends State<VibratingSection> {
   DragDirection? _dragDirection;
   double _boundary1 = 0;
   double _boundary2 = 0;
+  final player = AudioPlayer();
 
   @override
   Widget build(BuildContext context) {
@@ -69,21 +70,20 @@ class _VibratingSectionState extends State<VibratingSection> {
                 height: screenHeight / 3, 
                 child: GestureDetector(
                   onTap: () {
-                    final player = AudioPlayer();
                     player.play(AssetSource('c.mp3')); 
 
-                    //Vibration.vibrate(duration: 2);
+                    Vibration.vibrate(duration: 10);
                   },
-                  // onDoubleTap: () {
-                  //     Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //       builder: (context) => const SecondRoute(
-                  //         title: "New Screen",
-                  //       )
-                  //     )
-                  //   );
-                  // }
+                  onDoubleTap: () {
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SecondRoute(
+                          title: "New Screen",
+                        )
+                      )
+                    );
+                  }
                 ),
               ),
               SizedBox(
@@ -150,8 +150,8 @@ class _VibratingSectionState extends State<VibratingSection> {
   }
 
   void _vibrate() async {
-    HapticFeedback.selectionClick();
-    //Vibration.vibrate(duration: 200);
+    //HapticFeedback.selectionClick();
+    Vibration.vibrate(duration: 10);
   }
 
   void _resetState() {
