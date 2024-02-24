@@ -1,166 +1,340 @@
-import 'dart:async';
+// import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:sensors_plus/sensors_plus.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
+// import 'package:sensors_plus/sensors_plus.dart';
 
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations(
-    [
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ],
-  );
+// void main() {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   SystemChrome.setPreferredOrientations(
+//     [
+//       DeviceOrientation.portraitUp,
+//       DeviceOrientation.portraitDown,
+//     ],
+//   );
 
-  runApp(const MyApp());
-}
+//   runApp(const MyApp());
+// }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+// class MyApp extends StatelessWidget {
+//   const MyApp({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Sensors Demo',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: const Color(0x9f4376f8),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Sensors Demo',
+//       theme: ThemeData(
+//         useMaterial3: true,
+//         colorSchemeSeed: const Color(0x9f4376f8),
+//       ),
+//       home: const MyHomePage(title: 'Flutter Demo Home Page'),
+//     );
+//   }
+// }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, this.title}) : super(key: key);
+// class MyHomePage extends StatefulWidget {
+//   const MyHomePage({Key? key, this.title}) : super(key: key);
 
-  final String? title;
+//   final String? title;
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
+//   @override
+//   State<MyHomePage> createState() => _MyHomePageState();
+// }
 
-class _MyHomePageState extends State<MyHomePage> {
-  static const Duration _ignoreDuration = Duration(milliseconds: 20);
+// class _MyHomePageState extends State<MyHomePage> {
+//   static const Duration _ignoreDuration = Duration(milliseconds: 20);
 
-  static const int _snakeRows = 20;
-  static const int _snakeColumns = 20;
-  static const double _snakeCellSize = 10.0;
+//   // static const int _snakeRows = 20;
+//   // static const int _snakeColumns = 20;
+//   // static const double _snakeCellSize = 10.0;
 
-  UserAccelerometerEvent? _userAccelerometerEvent;
-  AccelerometerEvent? _accelerometerEvent;
-  GyroscopeEvent? _gyroscopeEvent;
-  MagnetometerEvent? _magnetometerEvent;
+//   UserAccelerometerEvent? _userAccelerometerEvent;
+//   AccelerometerEvent? _accelerometerEvent;
+//   GyroscopeEvent? _gyroscopeEvent;
+//   MagnetometerEvent? _magnetometerEvent;
 
-  DateTime? _userAccelerometerUpdateTime;
-  DateTime? _accelerometerUpdateTime;
-  DateTime? _gyroscopeUpdateTime;
-  DateTime? _magnetometerUpdateTime;
+//   DateTime? _userAccelerometerUpdateTime;
+//   DateTime? _accelerometerUpdateTime;
+//   DateTime? _gyroscopeUpdateTime;
+//   DateTime? _magnetometerUpdateTime;
 
-  int? _userAccelerometerLastInterval;
-  int? _accelerometerLastInterval;
-  int? _gyroscopeLastInterval;
-  int? _magnetometerLastInterval;
-  final _streamSubscriptions = <StreamSubscription<dynamic>>[];
+//   int? _userAccelerometerLastInterval;
+//   int? _accelerometerLastInterval;
+//   int? _gyroscopeLastInterval;
+//   int? _magnetometerLastInterval;
+//   final _streamSubscriptions = <StreamSubscription<dynamic>>[];
 
-  Duration sensorInterval = SensorInterval.normalInterval;
+//   Duration sensorInterval = SensorInterval.normalInterval;
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sensors Plus Example'),
-        elevation: 4,
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Center(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                border: Border.all(width: 1.0, color: Colors.black38),
-              ),
-              child: const SizedBox(
-                height: _snakeRows * _snakeCellSize,
-                width: _snakeColumns * _snakeCellSize,
-              ),
-            ),
-),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Table(
-              columnWidths: const {
-                0: FlexColumnWidth(4),
-                4: FlexColumnWidth(2),
-              },
-              children: [
-                const TableRow(
-                  children: [
-                    SizedBox.shrink(),
-                    Text('X'),
-                    Text('Y'),
-                    Text('Z'),
-                    Text('Interval'),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text('UserAccelerometer'),
-                    ),
-                    Text(_userAccelerometerEvent?.x.toStringAsFixed(1) ?? '?'),
-                    Text(_userAccelerometerEvent?.y.toStringAsFixed(1) ?? '?'),
-                    Text(_userAccelerometerEvent?.z.toStringAsFixed(1) ?? '?'),
-                    Text(
-                        '${_userAccelerometerLastInterval?.toString() ?? '?'} ms'),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text('Accelerometer'),
-                    ),
-                    Text(_accelerometerEvent?.x.toStringAsFixed(1) ?? '?'),
-                    Text(_accelerometerEvent?.y.toStringAsFixed(1) ?? '?'),
-                    Text(_accelerometerEvent?.z.toStringAsFixed(1) ?? '?'),
-                    Text('${_accelerometerLastInterval?.toString() ?? '?'} ms'),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text('Gyroscope'),
-                    ),
-                    Text(_gyroscopeEvent?.x.toStringAsFixed(1) ?? '?'),
-                    Text(_gyroscopeEvent?.y.toStringAsFixed(1) ?? '?'),
-                    Text(_gyroscopeEvent?.z.toStringAsFixed(1) ?? '?'),
-                    Text('${_gyroscopeLastInterval?.toString() ?? '?'} ms'),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text('Magnetometer'),
-                    ),
-                    Text(_magnetometerEvent?.x.toStringAsFixed(1) ?? '?'),
-                    Text(_magnetometerEvent?.y.toStringAsFixed(1) ?? '?'),
-                    Text(_magnetometerEvent?.z.toStringAsFixed(1) ?? '?'),
-                    Text('${_magnetometerLastInterval?.toString() ?? '?'} ms'),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ]
-      )
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Sensors Plus Example'),
+//         elevation: 4,
+//       ),
+//       body: Column(
+//         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//         children: <Widget>[
+//           Center(
+//             child: DecoratedBox(
+//               decoration: BoxDecoration(
+//                 border: Border.all(width: 1.0, color: Colors.black38),
+//               ),
+//               // child: const SizedBox(
+//               //   height: _snakeRows * _snakeCellSize,
+//               //   width: _snakeColumns * _snakeCellSize,
+//               // ),
+//             ),
+//           ),
+//           Padding(
+//             padding: const EdgeInsets.all(20.0),
+//             child: Table(
+//               columnWidths: const {
+//                 0: FlexColumnWidth(4),
+//                 4: FlexColumnWidth(2),
+//               },
+//               children: [
+//                 const TableRow(
+//                   children: [
+//                     SizedBox.shrink(),
+//                     Text('X'),
+//                     Text('Y'),
+//                     Text('Z'),
+//                     Text('Interval'),
+//                   ],
+//                 ),
+//                 TableRow(
+//                   children: [
+//                     const Padding(
+//                       padding: EdgeInsets.symmetric(vertical: 8.0),
+//                       child: Text('UserAccelerometer'),
+//                     ),
+//                     Text(_userAccelerometerEvent?.x.toStringAsFixed(1) ?? '?'),
+//                     Text(_userAccelerometerEvent?.y.toStringAsFixed(1) ?? '?'),
+//                     Text(_userAccelerometerEvent?.z.toStringAsFixed(1) ?? '?'),
+//                     Text(
+//                         '${_userAccelerometerLastInterval?.toString() ?? '?'} ms'),
+//                   ],
+//                 ),
+//                 TableRow(
+//                   children: [
+//                     const Padding(
+//                       padding: EdgeInsets.symmetric(vertical: 8.0),
+//                       child: Text('Accelerometer'),
+//                     ),
+//                     Text(_accelerometerEvent?.x.toStringAsFixed(1) ?? '?'),
+//                     Text(_accelerometerEvent?.y.toStringAsFixed(1) ?? '?'),
+//                     Text(_accelerometerEvent?.z.toStringAsFixed(1) ?? '?'),
+//                     Text('${_accelerometerLastInterval?.toString() ?? '?'} ms'),
+//                   ],
+//                 ),
+//                 TableRow(
+//                   children: [
+//                     const Padding(
+//                       padding: EdgeInsets.symmetric(vertical: 8.0),
+//                       child: Text('Gyroscope'),
+//                     ),
+//                     Text(_gyroscopeEvent?.x.toStringAsFixed(1) ?? '?'),
+//                     Text(_gyroscopeEvent?.y.toStringAsFixed(1) ?? '?'),
+//                     Text(_gyroscopeEvent?.z.toStringAsFixed(1) ?? '?'),
+//                     Text('${_gyroscopeLastInterval?.toString() ?? '?'} ms'),
+//                   ],
+//                 ),
+//                 TableRow(
+//                   children: [
+//                     const Padding(
+//                       padding: EdgeInsets.symmetric(vertical: 8.0),
+//                       child: Text('Magnetometer'),
+//                     ),
+//                     Text(_magnetometerEvent?.x.toStringAsFixed(1) ?? '?'),
+//                     Text(_magnetometerEvent?.y.toStringAsFixed(1) ?? '?'),
+//                     Text(_magnetometerEvent?.z.toStringAsFixed(1) ?? '?'),
+//                     Text('${_magnetometerLastInterval?.toString() ?? '?'} ms'),
+//                   ],
+//                 ),
+//               ],
+//             ),
+//           ),
+//           // Column(
+//           //   mainAxisSize: MainAxisSize.min,
+//           //   children: [
+//           //     const Text('Update Interval:'),
+//           //     SegmentedButton(
+//           //       segments: [
+//           //         ButtonSegment(
+//           //           value: SensorInterval.gameInterval,
+//           //           label: Text('Game\n'
+//           //               '(${SensorInterval.gameInterval.inMilliseconds}ms)'),
+//           //         ),
+//           //         ButtonSegment(
+//           //           value: SensorInterval.uiInterval,
+//           //           label: Text('UI\n'
+//           //               '(${SensorInterval.uiInterval.inMilliseconds}ms)'),
+//           //         ),
+//           //         ButtonSegment(
+//           //           value: SensorInterval.normalInterval,
+//           //           label: Text('Normal\n'
+//           //               '(${SensorInterval.normalInterval.inMilliseconds}ms)'),
+//           //         ),
+//           //         const ButtonSegment(
+//           //           value: Duration(milliseconds: 500),
+//           //           label: Text('500ms'),
+//           //         ),
+//           //         const ButtonSegment(
+//           //           value: Duration(seconds: 1),
+//           //           label: Text('1s'),
+//           //         ),
+//           //       ],
+//           //       selected: {sensorInterval},
+//           //       showSelectedIcon: false,
+//           //       onSelectionChanged: (value) {
+//           //         setState(() {
+//           //           sensorInterval = value.first;
+//           //           userAccelerometerEventStream(
+//           //               samplingPeriod: sensorInterval);
+//           //           accelerometerEventStream(samplingPeriod: sensorInterval);
+//           //           gyroscopeEventStream(samplingPeriod: sensorInterval);
+//           //           magnetometerEventStream(samplingPeriod: sensorInterval);
+//           //         });
+//           //       },
+//           //     ),
+//           //   ],
+//           // ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   @override
+//   void dispose() {
+//     super.dispose();
+//     for (final subscription in _streamSubscriptions) {
+//       subscription.cancel();
+//     }
+//   }
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     _streamSubscriptions.add(
+//       userAccelerometerEventStream(samplingPeriod: sensorInterval).listen(
+//         (UserAccelerometerEvent event) {
+//           final now = DateTime.now();
+//           setState(() {
+//             _userAccelerometerEvent = event;
+//             if (_userAccelerometerUpdateTime != null) {
+//               final interval = now.difference(_userAccelerometerUpdateTime!);
+//               if (interval > _ignoreDuration) {
+//                 _userAccelerometerLastInterval = interval.inMilliseconds;
+//               }
+//             }
+//           });
+//           _userAccelerometerUpdateTime = now;
+//         },
+//         onError: (e) {
+//           showDialog(
+//               context: context,
+//               builder: (context) {
+//                 return const AlertDialog(
+//                   title: Text("Sensor Not Found"),
+//                   content: Text(
+//                       "It seems that your device doesn't support User Accelerometer Sensor"),
+//                 );
+//               });
+//         },
+//         cancelOnError: true,
+//       ),
+//     );
+//     _streamSubscriptions.add(
+//       accelerometerEventStream(samplingPeriod: sensorInterval).listen(
+//         (AccelerometerEvent event) {
+//           final now = DateTime.now();
+//           setState(() {
+//             _accelerometerEvent = event;
+//             if (_accelerometerUpdateTime != null) {
+//               final interval = now.difference(_accelerometerUpdateTime!);
+//               if (interval > _ignoreDuration) {
+//                 _accelerometerLastInterval = interval.inMilliseconds;
+//               }
+//             }
+//           });
+//           _accelerometerUpdateTime = now;
+//         },
+//         onError: (e) {
+//           showDialog(
+//               context: context,
+//               builder: (context) {
+//                 return const AlertDialog(
+//                   title: Text("Sensor Not Found"),
+//                   content: Text(
+//                       "It seems that your device doesn't support Accelerometer Sensor"),
+//                 );
+//               });
+//         },
+//         cancelOnError: true,
+//       ),
+//     );
+//     _streamSubscriptions.add(
+//       gyroscopeEventStream(samplingPeriod: sensorInterval).listen(
+//         (GyroscopeEvent event) {
+//           final now = DateTime.now();
+//           setState(() {
+//             _gyroscopeEvent = event;
+//             if (_gyroscopeUpdateTime != null) {
+//               final interval = now.difference(_gyroscopeUpdateTime!);
+//               if (interval > _ignoreDuration) {
+//                 _gyroscopeLastInterval = interval.inMilliseconds;
+//               }
+//             }
+//           });
+//           _gyroscopeUpdateTime = now;
+//         },
+//         onError: (e) {
+//           showDialog(
+//               context: context,
+//               builder: (context) {
+//                 return const AlertDialog(
+//                   title: Text("Sensor Not Found"),
+//                   content: Text(
+//                       "It seems that your device doesn't support Gyroscope Sensor"),
+//                 );
+//               });
+//         },
+//         cancelOnError: true,
+//       ),
+//     );
+//     _streamSubscriptions.add(
+//       magnetometerEventStream(samplingPeriod: sensorInterval).listen(
+//         (MagnetometerEvent event) {
+//           final now = DateTime.now();
+//           setState(() {
+//             _magnetometerEvent = event;
+//             if (_magnetometerUpdateTime != null) {
+//               final interval = now.difference(_magnetometerUpdateTime!);
+//               if (interval > _ignoreDuration) {
+//                 _magnetometerLastInterval = interval.inMilliseconds;
+//               }
+//             }
+//           });
+//           _magnetometerUpdateTime = now;
+//         },
+//         onError: (e) {
+//           showDialog(
+//               context: context,
+//               builder: (context) {
+//                 return const AlertDialog(
+//                   title: Text("Sensor Not Found"),
+//                   content: Text(
+//                       "It seems that your device doesn't support Magnetometer Sensor"),
+//                 );
+//               });
+//         },
+//         cancelOnError: true,
+//       ),
+//     );
+//   }
+// }
 
 
 
@@ -288,218 +462,229 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
 
+// MAIN THING!!!!!
 
-// import 'package:flutter/material.dart';
-// import 'package:vibration/vibration.dart';
-// import 'package:flutter/services.dart';
-// import 'package:flutter_application_1/screen_three.dart';
-// import 'package:flutter_application_1/screen_two.dart';
-// import 'package:flutter_application_1/change_color.dart';
-// import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
+import 'package:vibration/vibration.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_application_1/screen_three.dart';
+import 'package:flutter_application_1/screen_two.dart';
+import 'package:flutter_application_1/change_color.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 
-// void main() {
-//   runApp(MyApp());
-// }
+void main() {
+  runApp(MyApp());
+}
 
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: HomeScreen(),
-//     );
-//   }
-// }
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: HomeScreen(),
+    );
+  }
+}
 
-// class HomeScreen extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     // return Scaffold(
-//     //   body: VibratingSection(),
-//     // );
-//     return Stack(
-//       children:[
-//         VibratingSection(),
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // return Scaffold(
+    //   body: VibratingSection(),
+    // );
+    return Stack(
+      children:[
+        VibratingSection(),
         
-//       ]
-//     );
-//   }
-// }
+      ]
+    );
+  }
+}
 
 
 
 
 
-// class VibratingSection extends StatefulWidget {
-//   @override
-//   _VibratingSectionState createState() => _VibratingSectionState();
-// }
+class VibratingSection extends StatefulWidget {
+  @override
+  _VibratingSectionState createState() => _VibratingSectionState();
+}
 
-// enum DragDirection { up, down }
+enum DragDirection { up, down }
 
-// class _VibratingSectionState extends State<VibratingSection> {
-//   bool _hasVibrated = false;
-//   DragDirection? _dragDirection;
-//   double _boundary1 = 0;
-//   double _boundary2 = 0;
-//   final player = AudioPlayer();
+class _VibratingSectionState extends State<VibratingSection> {
+  bool _hasVibrated = false;
+  DragDirection? _dragDirection;
+  double _boundary1 = 0;
+  double _boundary2 = 0;
+  final player = AudioPlayer();
 
-//   @override
-//   Widget build(BuildContext context) {
-//     final screenHeight = MediaQuery.of(context).size.height;
-//     return GestureDetector (
-//       onVerticalDragDown: (details) => _startDrag(details, screenHeight),
-//       onVerticalDragUpdate: (details) => _checkPosition(details),
-//       onVerticalDragEnd: (_) => _resetState(),
-//       child: Container (
-//         color: _hasVibrated ? Colors.green : Colors.blue,
-//           child: Column(
-//             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//             children: [
-//               SizedBox(
-//                 width: MediaQuery.of(context).size.width,
-//                 height: screenHeight / 3, 
-//                 child: GestureDetector(
-//                   onTap: () {
-//                     player.play(AssetSource('c.mp3')); 
+  @override
+  Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    return GestureDetector (
+      onVerticalDragDown: (details) => _startDrag(details, screenHeight),
+      onVerticalDragUpdate: (details) => _checkPosition(details),
+      onVerticalDragEnd: (_) => _resetState(),
+      child: Container (
+        color: _hasVibrated ? Colors.green : Colors.blue,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: screenHeight / 3, 
+                child: GestureDetector(
+                  onTap: () {
+                    player.play(AssetSource('c.mp3')); 
 
-//                     Vibration.vibrate(duration: 10);
-//                   },
-//                   onDoubleTap: () {
-//                       Navigator.push(
-//                       context,
-//                       MaterialPageRoute(
-//                         builder: (context) => const SecondRoute(
-//                           title: "New Screen",
-//                         )
-//                       )
-//                     );
-//                   }
-//                 ),
-//               ),
-//               SizedBox(
-//                 width: MediaQuery.of(context).size.width,
-//                 height: screenHeight / 3, 
-//                 child: GestureDetector(
-//                   onTap: () {Vibration.vibrate(duration: 2);},
-//                   onDoubleTap: () {
-//                       Navigator.push(
-//                       context,
-//                       MaterialPageRoute(
-//                         builder: (context) => const ThirdRoute(
-//                           title: "New Screen",
-//                         )
-//                       )
-//                     );
-//                   }
-//                 ),
-//               ),
-//               SizedBox(
-//                 width: MediaQuery.of(context).size.width,
-//                 height: screenHeight / 3, 
-//                 child: GestureDetector(
-//                   onTap: () {Vibration.vibrate(duration: 2);}
-//                 ),
-//               ),
-//             ]
-//           )
-//       ),
-//     );
-//   }
+                    Vibration.vibrate(duration: 10);
+                  },
+                  onDoubleTap: () {
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SecondRoute(
+                          title: "New Screen",
+                        )
+                      )
+                    );
+                  }
+                ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: screenHeight / 3, 
+                child: GestureDetector(
+                  onTap: () {Vibration.vibrate(duration: 2);},
+                  onDoubleTap: () {
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ThirdRoute(
+                          title: "New Screen",
+                        )
+                      )
+                    );
+                  }
+                ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: screenHeight / 3, 
+                child: GestureDetector(
+                  onTap: () {Vibration.vibrate(duration: 2);},
+                  onDoubleTap: () {
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const DrawingApp(
+                          title: "New Screen",
+                        )
+                      )
+                    );
+                  }
+                ),
+              ),
+            ]
+          )
+      ),
+    );
+  }
 
-//   void _startDrag(DragDownDetails details, double screenHeight) {
-//     // Reset the state on the start of a new drag
-//     _resetState();
-//     // Get the boundaries based on the screen height
-//     _boundary1 = screenHeight / 3;
-//     _boundary2 = screenHeight * 2 / 3;
-//     // Determine the initial drag direction based on the start position
-//     _dragDirection = details.localPosition.dy < _boundary1
-//         ? DragDirection.down
-//         : details.localPosition.dy < _boundary2
-//             ? DragDirection.up
-//             : DragDirection.down;
-//   }
+  void _startDrag(DragDownDetails details, double screenHeight) {
+    // Reset the state on the start of a new drag
+    _resetState();
+    // Get the boundaries based on the screen height
+    _boundary1 = screenHeight / 3;
+    _boundary2 = screenHeight * 2 / 3;
+    // Determine the initial drag direction based on the start position
+    _dragDirection = details.localPosition.dy < _boundary1
+        ? DragDirection.down
+        : details.localPosition.dy < _boundary2
+            ? DragDirection.up
+            : DragDirection.down;
+  }
 
-//   void _checkPosition(DragUpdateDetails details) {
-//     // Get the current drag direction
-//     final currentDragDirection = details.localPosition.dy < _boundary1
-//         ? DragDirection.down
-//         : details.localPosition.dy < _boundary2
-//             ? DragDirection.up
-//             : DragDirection.down;
+  void _checkPosition(DragUpdateDetails details) {
+    // Get the current drag direction
+    final currentDragDirection = details.localPosition.dy < _boundary1
+        ? DragDirection.down
+        : details.localPosition.dy < _boundary2
+            ? DragDirection.up
+            : DragDirection.down;
 
-//     if (_dragDirection != currentDragDirection) {
-//       // The drag direction has changed, and we have crossed a boundary
-//       setState(() {
-//         _hasVibrated = true;
-//         _vibrate();
-//       });
-//       // Update the drag direction
-//       _dragDirection = currentDragDirection;
-//     }
-//   }
+    if (_dragDirection != currentDragDirection) {
+      // The drag direction has changed, and we have crossed a boundary
+      setState(() {
+        _hasVibrated = true;
+        _vibrate();
+      });
+      // Update the drag direction
+      _dragDirection = currentDragDirection;
+    }
+  }
 
-//   void _vibrate() async {
-//     //HapticFeedback.selectionClick();
-//     Vibration.vibrate(duration: 10);
-//   }
+  void _vibrate() async {
+    //HapticFeedback.selectionClick();
+    Vibration.vibrate(duration: 10);
+  }
 
-//   void _resetState() {
-//     setState(() {
-//       _hasVibrated = false;
-//       _dragDirection = null;
-//     });
-//   }
-// }
-
-
+  void _resetState() {
+    setState(() {
+      _hasVibrated = false;
+      _dragDirection = null;
+    });
+  }
+}
 
 
 
 
 
-// class VibratingSection2 extends StatefulWidget {
-//   @override
-//   _VibratingSectionState2 createState() => _VibratingSectionState2();
-// }
 
-// class _VibratingSectionState2 extends State<VibratingSection> {
-//   bool _hasVibrated = false;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Expanded(
-//       child: GestureDetector(
-//         onPanStart: (_) => _vibrateOnce(),
-//         child: Container(
-//           color: Colors.blue,
-//           child: const Center(
-//             child: Text(
-//               'Touch to Vibrate',
-//               style: TextStyle(color: Colors.white, fontSize: 20),
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
+class VibratingSection2 extends StatefulWidget {
+  @override
+  _VibratingSectionState2 createState() => _VibratingSectionState2();
+}
 
-//   void _vibrateOnce() async {
-//     if (!_hasVibrated) {
-//       Vibration.vibrate(duration: 200);
-//       setState(() {
-//         _hasVibrated = true;
-//       });
-//     }
-//   }
+class _VibratingSectionState2 extends State<VibratingSection> {
+  bool _hasVibrated = false;
 
-//   @override
-//   void dispose() {
-//     super.dispose();
-//     _hasVibrated = false;
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GestureDetector(
+        onPanStart: (_) => _vibrateOnce(),
+        child: Container(
+          color: Colors.blue,
+          child: const Center(
+            child: Text(
+              'Touch to Vibrate',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _vibrateOnce() async {
+    if (!_hasVibrated) {
+      Vibration.vibrate(duration: 200);
+      setState(() {
+        _hasVibrated = true;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _hasVibrated = false;
+  }
+}
 
 
 
