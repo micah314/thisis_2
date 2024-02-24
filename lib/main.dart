@@ -467,9 +467,9 @@
 import 'package:flutter/material.dart';
 import 'package:vibration/vibration.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application_1/screen_three.dart';
-import 'package:flutter_application_1/screen_two.dart';
-import 'package:flutter_application_1/change_color.dart';
+import 'package:flutter_application_1/circle_page.dart';
+import 'package:flutter_application_1/numbers_page.dart';
+import 'package:flutter_application_1/sensors_page.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 
