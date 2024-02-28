@@ -3,7 +3,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:vibration/vibration.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_application_1/circle_page.dart';
 import 'package:flutter_application_1/numbers_page.dart';
 import 'package:flutter_application_1/sensors_page.dart';
