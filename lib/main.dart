@@ -2,6 +2,7 @@
 // MAIN THING!!!!!
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:vibration/vibration.dart';
 import 'package:flutter_application_1/circle_page.dart';
 import 'package:flutter_application_1/numbers_page.dart';
@@ -63,14 +64,15 @@ class _VibratingSectionState extends State<VibratingSection> {
       onVerticalDragUpdate: (details) => _checkPosition(details),
       onVerticalDragEnd: (_) => _resetState(),
       child: Container (
-        color: _hasVibrated ? Colors.green : Colors.blue,
+        color: Colors.black,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: screenHeight / 3, 
+                height: screenHeight / 3 - 5, 
                 child: GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     player.play(AssetSource('c.mp3')); 
 
@@ -85,12 +87,27 @@ class _VibratingSectionState extends State<VibratingSection> {
                         )
                       )
                     );
-                  }
+                  },
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.favorite,
+                        color: Colors.white,
+                        size: screenHeight / 6,
+                      ),
+                      const Text("hi"),
+                    ],
+                  ),
                 ),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 10, 
+                color: Colors.white
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: screenHeight / 3, 
+                height: screenHeight / 3 - 10, 
                 child: GestureDetector(
                   onTap: () {Vibration.vibrate(duration: 2);},
                   onDoubleTap: () {
@@ -105,9 +122,14 @@ class _VibratingSectionState extends State<VibratingSection> {
                   }
                 ),
               ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 10, 
+                color: Colors.white
+              ),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: screenHeight / 3, 
+                height: screenHeight / 3 - 5, 
                 child: GestureDetector(
                   onTap: () {Vibration.vibrate(duration: 2);},
                   onDoubleTap: () {
@@ -180,47 +202,47 @@ class _VibratingSectionState extends State<VibratingSection> {
 
 
 
-class VibratingSection2 extends StatefulWidget {
-  @override
-  _VibratingSectionState2 createState() => _VibratingSectionState2();
-}
+// class VibratingSection2 extends StatefulWidget {
+//   @override
+//   _VibratingSectionState2 createState() => _VibratingSectionState2();
+// }
 
-class _VibratingSectionState2 extends State<VibratingSection> {
-  bool _hasVibrated = false;
+// class _VibratingSectionState2 extends State<VibratingSection> {
+//   bool _hasVibrated = false;
 
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: GestureDetector(
-        onPanStart: (_) => _vibrateOnce(),
-        child: Container(
-          color: Colors.blue,
-          child: const Center(
-            child: Text(
-              'Touch to Vibrate',
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+//   @override
+//   Widget build(BuildContext context) {
+//     return Expanded(
+//       child: GestureDetector(
+//         onPanStart: (_) => _vibrateOnce(),
+//         child: Container(
+//           color: Colors.black,
+//           child: const Center(
+//             child: Text(
+//               'Touch to Vibrate',
+//               style: TextStyle(color: Colors.white, fontSize: 20),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
 
-  void _vibrateOnce() async {
-    if (!_hasVibrated) {
-      Vibration.vibrate(duration: 200);
-      setState(() {
-        _hasVibrated = true;
-      });
-    }
-  }
+//   void _vibrateOnce() async {
+//     if (!_hasVibrated) {
+//       Vibration.vibrate(duration: 200);
+//       setState(() {
+//         _hasVibrated = true;
+//       });
+//     }
+//   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _hasVibrated = false;
-  }
-}
+//   @override
+//   void dispose() {
+//     super.dispose();
+//     _hasVibrated = false;
+//   }
+// }
 
 
 
