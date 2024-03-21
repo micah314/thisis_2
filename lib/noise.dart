@@ -31,14 +31,17 @@ class _WaveAnimationPageState extends State<WaveAnimationPage> with SingleTicker
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text('Wave Animation'),
+        iconTheme: const IconThemeData(
+          color: Colors.white, //change your color here
+        ),
+        backgroundColor: Colors.black,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _buildWave(),
-            SizedBox(height: 40),
+            const SizedBox(height: 80),
             _buildSlider(),
           ],
         ),
@@ -47,7 +50,7 @@ class _WaveAnimationPageState extends State<WaveAnimationPage> with SingleTicker
   }
 
   Widget _buildWave() {
-    return Container(
+    return SizedBox(
       width: 300,
       height: 100,
       child: AnimatedBuilder(
@@ -62,7 +65,7 @@ class _WaveAnimationPageState extends State<WaveAnimationPage> with SingleTicker
   }
 
   Widget _buildSlider() {
-    return Container(
+    return SizedBox(
       width: 300,
       child: Slider(
         value: maxAmplitude,

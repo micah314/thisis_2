@@ -45,7 +45,10 @@ class _ExpandingCircleState extends State<ExpandingCircle>
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text('Expanding Circle'),
+        iconTheme: const IconThemeData(
+          color: Colors.white, //change your color here
+        ),
+        backgroundColor: Colors.black,
       ),
       body: Center(
         child: Column(

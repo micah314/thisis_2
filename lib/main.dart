@@ -1,119 +1,9 @@
 
-// BREATHING!!!!!!!!!
-// import 'package:flutter/material.dart';
-
-// void main() {
-//   runApp(MyApp());
-// }
-
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Expanding Circle',
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//       ),
-//       home: ExpandingCircle(),
-//     );
-//   }
-// }
-
-// class ExpandingCircle extends StatefulWidget {
-//   @override
-//   _ExpandingCircleState createState() => _ExpandingCircleState();
-// }
-
-// class _ExpandingCircleState extends State<ExpandingCircle>
-//     with SingleTickerProviderStateMixin {
-//   late AnimationController _controller;
-//   late Animation<double> _animation;
-//   double _sliderValue = 3;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _controller = AnimationController(
-//       vsync: this,
-//       duration: Duration(seconds: 3), // Total duration for one cycle
-//     )..repeat(reverse: true); // Reverses animation at the end
-//     _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
-//   }
-
-//   @override
-//   void dispose() {
-//     _controller.dispose();
-//     super.dispose();
-//   }
-
-//   void _updateCircleSize(double value) {
-//     setState(() {
-//       _sliderValue = value;
-//       _controller.duration = Duration(seconds: (value).round()); // Adjust the multiplier as needed
-//       _controller.repeat(reverse: true); // Restart animation with new duration
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.black,
-//       appBar: AppBar(
-//         title: Text('Expanding Circle'),
-//       ),
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             AnimatedBuilder(
-//               animation: _animation,
-//               builder: (context, child) {
-//                 return Container(
-//                   width: 100.0 + (_animation.value * 150.0), // Adjust the multiplier as needed
-//                   height: 100.0 + (_animation.value * 150.0), // Adjust the multiplier as needed
-//                   decoration: const BoxDecoration(
-//                     shape: BoxShape.circle,
-//                     color: Colors.white,
-//                   ),
-//                 );
-//               },
-//             ),
-//             const SizedBox(height: 20),
-//             Slider(
-//               value: _sliderValue,
-//               min: 1,
-//               max: 6,
-//               onChanged: _updateCircleSize,
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // MAIN THING!!!!!
 
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+// import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/breathing_page.dart';
 import 'package:flutter_application_1/noise.dart';
 import 'package:vibration/vibration.dart';
@@ -151,9 +41,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
-
-
 
 
 class VibratingSection extends StatefulWidget {
@@ -209,8 +96,11 @@ class _VibratingSectionState extends State<VibratingSection> {
                         color: Colors.white,
                         size: screenHeight / 6,
                       ),
+                      const SizedBox(
+                        width: 30,
+                      ),
                       const DefaultTextStyle(
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.white, fontSize: 25),
                         child: Text('Breathing'),
                       )
                     ],
@@ -246,8 +136,11 @@ class _VibratingSectionState extends State<VibratingSection> {
                         size: screenHeight / 6,
                       ),
                       SizedBox(width: 10, height: MediaQuery.of(context).size.width),
+                      const SizedBox(
+                        width: 30,
+                      ),
                       const DefaultTextStyle(
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.white, fontSize: 25),
                         child: Text('Circles'),
                       )
                     ],
@@ -282,9 +175,12 @@ class _VibratingSectionState extends State<VibratingSection> {
                         color: Colors.white,
                         size: screenHeight / 6,
                       ),
+                      const SizedBox(
+                        width: 30,
+                      ),
                       const DefaultTextStyle(
-                        style: TextStyle(color: Colors.white),
-                        child: Text('Slow'),
+                        style: TextStyle(color: Colors.white, fontSize: 25),
+                        child: Text('Wave'),
                       )
                     ],
                   ),
