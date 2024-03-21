@@ -1,13 +1,123 @@
 
+// import 'package:flutter/material.dart';
+
+// void main() {
+//   runApp(MyApp());
+// }
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Expanding Circle',
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//       ),
+//       home: ExpandingCircle(),
+//     );
+//   }
+// }
+
+// class ExpandingCircle extends StatefulWidget {
+//   @override
+//   _ExpandingCircleState createState() => _ExpandingCircleState();
+// }
+
+// class _ExpandingCircleState extends State<ExpandingCircle>
+//     with SingleTickerProviderStateMixin {
+//   late AnimationController _controller;
+//   late Animation<double> _animation;
+//   double _sliderValue = 3;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     _controller = AnimationController(
+//       vsync: this,
+//       duration: Duration(seconds: 3), // Total duration for one cycle
+//     )..repeat(reverse: true); // Reverses animation at the end
+//     _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
+//   }
+
+//   @override
+//   void dispose() {
+//     _controller.dispose();
+//     super.dispose();
+//   }
+
+//   void _updateCircleSize(double value) {
+//     setState(() {
+//       _sliderValue = value;
+//       _controller.duration = Duration(seconds: (value).round()); // Adjust the multiplier as needed
+//       _controller.repeat(reverse: true); // Restart animation with new duration
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.black,
+//       appBar: AppBar(
+//         title: Text('Expanding Circle'),
+//       ),
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             AnimatedBuilder(
+//               animation: _animation,
+//               builder: (context, child) {
+//                 return Container(
+//                   width: 100.0 + (_animation.value * 150.0), // Adjust the multiplier as needed
+//                   height: 100.0 + (_animation.value * 150.0), // Adjust the multiplier as needed
+//                   decoration: const BoxDecoration(
+//                     shape: BoxShape.circle,
+//                     color: Colors.white,
+//                   ),
+//                 );
+//               },
+//             ),
+//             const SizedBox(height: 20),
+//             Slider(
+//               value: _sliderValue,
+//               min: 1,
+//               max: 6,
+//               onChanged: _updateCircleSize,
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // MAIN THING!!!!!
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:vibration/vibration.dart';
-import 'package:flutter_application_1/circle_page.dart';
+// import 'package:flutter_application_1/circle_page.dart';
 import 'package:flutter_application_1/numbers_page.dart';
 import 'package:flutter_application_1/sensors_page.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_application_1/circle_two.dart';
 
 
 void main() {
@@ -70,7 +180,7 @@ class _VibratingSectionState extends State<VibratingSection> {
             children: [
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: screenHeight / 3 - 5, 
+                height: (screenHeight / 3) - 5, 
                 child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () {
@@ -95,7 +205,7 @@ class _VibratingSectionState extends State<VibratingSection> {
                         color: Colors.white,
                         size: screenHeight / 6,
                       ),
-                      const Text("hi"),
+                      const Text('hi', style: TextStyle(height: 5, fontSize: 10)),
                     ],
                   ),
                 ),
@@ -114,7 +224,7 @@ class _VibratingSectionState extends State<VibratingSection> {
                       Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ThirdRoute(
+                        builder: (context) => const ThirdRoute2(
                           title: "New Screen",
                         )
                       )
@@ -195,86 +305,3 @@ class _VibratingSectionState extends State<VibratingSection> {
     });
   }
 }
-
-
-
-
-
-
-
-// class VibratingSection2 extends StatefulWidget {
-//   @override
-//   _VibratingSectionState2 createState() => _VibratingSectionState2();
-// }
-
-// class _VibratingSectionState2 extends State<VibratingSection> {
-//   bool _hasVibrated = false;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Expanded(
-//       child: GestureDetector(
-//         onPanStart: (_) => _vibrateOnce(),
-//         child: Container(
-//           color: Colors.black,
-//           child: const Center(
-//             child: Text(
-//               'Touch to Vibrate',
-//               style: TextStyle(color: Colors.white, fontSize: 20),
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-
-//   void _vibrateOnce() async {
-//     if (!_hasVibrated) {
-//       Vibration.vibrate(duration: 200);
-//       setState(() {
-//         _hasVibrated = true;
-//       });
-//     }
-//   }
-
-//   @override
-//   void dispose() {
-//     super.dispose();
-//     _hasVibrated = false;
-//   }
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
