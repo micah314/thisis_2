@@ -1,4 +1,5 @@
 
+// BREATHING!!!!!!!!!
 // import 'package:flutter/material.dart';
 
 // void main() {
@@ -110,15 +111,15 @@
 
 // MAIN THING!!!!!
 
-import 'dart:js';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_application_1/breathing_page.dart';
+import 'package:flutter_application_1/noise.dart';
 import 'package:vibration/vibration.dart';
 // import 'package:flutter_application_1/circle_page.dart';
-import 'package:flutter_application_1/numbers_page.dart';
-import 'package:flutter_application_1/sensors_page.dart';
+// import 'package:flutter_application_1/numbers_page.dart';
+// import 'package:flutter_application_1/sensors_page.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_application_1/circle_two.dart';
 
@@ -195,7 +196,7 @@ class _VibratingSectionState extends State<VibratingSection> {
                       Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const SecondRoute(
+                        builder: (context) => const ExpandingCircle(
                           title: "New Screen",
                         )
                       )
@@ -268,7 +269,7 @@ class _VibratingSectionState extends State<VibratingSection> {
                       Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const DrawingApp(
+                        builder: (context) => const WaveAnimationPage(
                           title: "New Screen",
                         )
                       )
