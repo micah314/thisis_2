@@ -85,7 +85,10 @@ class _ThirdRouteState2 extends State<ThirdRoute2>{
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Resizable Circle App'),
+        iconTheme: const IconThemeData(
+          color: Colors.white, //change your color here
+        ),
+        backgroundColor: Colors.black,
       ),
       body: Center(
         child: AnimatedOpacity( //here

@@ -110,6 +110,9 @@
 
 // MAIN THING!!!!!
 
+import 'dart:js';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:vibration/vibration.dart';
@@ -201,11 +204,14 @@ class _VibratingSectionState extends State<VibratingSection> {
                   child: Row(
                     children: [
                       Icon(
-                        Icons.favorite,
+                        Icons.air, //Icons.adjust, album_outlines, animation, audiotrack_rounded, bubble chart, vibration
                         color: Colors.white,
                         size: screenHeight / 6,
                       ),
-                      const Text('hi', style: TextStyle(height: 5, fontSize: 10)),
+                      const DefaultTextStyle(
+                        style: TextStyle(color: Colors.white),
+                        child: Text('Breathing'),
+                      )
                     ],
                   ),
                 ),
@@ -219,6 +225,7 @@ class _VibratingSectionState extends State<VibratingSection> {
                 width: MediaQuery.of(context).size.width,
                 height: screenHeight / 3 - 10, 
                 child: GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {Vibration.vibrate(duration: 2);},
                   onDoubleTap: () {
                       Navigator.push(
@@ -229,7 +236,21 @@ class _VibratingSectionState extends State<VibratingSection> {
                         )
                       )
                     );
-                  }
+                  },
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.bubble_chart, //Icons.adjust, album_outlines, animation, audiotrack_rounded, bubble chart, vibration
+                        color: Colors.white,
+                        size: screenHeight / 6,
+                      ),
+                      SizedBox(width: 10, height: MediaQuery.of(context).size.width),
+                      const DefaultTextStyle(
+                        style: TextStyle(color: Colors.white),
+                        child: Text('Circles'),
+                      )
+                    ],
+                  ),
                 ),
               ),
               Container(
@@ -241,6 +262,7 @@ class _VibratingSectionState extends State<VibratingSection> {
                 width: MediaQuery.of(context).size.width,
                 height: screenHeight / 3 - 5, 
                 child: GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {Vibration.vibrate(duration: 2);},
                   onDoubleTap: () {
                       Navigator.push(
@@ -251,7 +273,20 @@ class _VibratingSectionState extends State<VibratingSection> {
                         )
                       )
                     );
-                  }
+                  },
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.vibration, //Icons.adjust, album_outlines, animation, audiotrack_rounded, bubble chart, vibration
+                        color: Colors.white,
+                        size: screenHeight / 6,
+                      ),
+                      const DefaultTextStyle(
+                        style: TextStyle(color: Colors.white),
+                        child: Text('Slow'),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ]
