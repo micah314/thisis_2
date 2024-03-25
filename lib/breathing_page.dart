@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vibration/vibration.dart';
 
 class ExpandingCircle extends StatefulWidget {
   const ExpandingCircle({super.key, required this.title});
@@ -36,6 +37,7 @@ class _ExpandingCircleState extends State<ExpandingCircle>
     setState(() {
       _sliderValue = value;
       _controller.duration = Duration(seconds: (value).round()); // Adjust the multiplier as needed
+      Vibration.vibrate(amplitude: 30, duration: (value).round() * 500);
       _controller.repeat(reverse: true); // Restart animation with new duration
     });
   }

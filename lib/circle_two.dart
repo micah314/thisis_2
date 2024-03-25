@@ -1,7 +1,4 @@
-/*
-1: Front page okay so far? Have to add high contrast words and different color changes
-2: I think my synchronization is off on the vibrating circle bit. Can you help me fix that?
-*/
+
 
 // import 'package:flutter/services.dart';
 

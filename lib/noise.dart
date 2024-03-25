@@ -1,3 +1,5 @@
+// ASK HOW THIS ONE SHOULD WORK!!!!!
+
 import 'dart:math';
 import 'package:sensors_plus/sensors_plus.dart';
 
@@ -18,26 +20,27 @@ class _WaveAnimationPageState extends State<WaveAnimationPage> with SingleTicker
   late AnimationController _controller;
   double maxAmplitude = 0.2;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _controller = AnimationController(vsync: this, duration: Duration(seconds: 2))..repeat();
-  // }
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this, duration: Duration(seconds: 2))..repeat();
+  }
 
-  // This whole block can be commented out if we don't want to use phone movement
-  static const Duration _ignoreDuration = Duration(milliseconds: 50);
-  UserAccelerometerEvent? _userAccelerometerEvent;
-  DateTime? _userAccelerometerUpdateTime;
-  DateTime? _accelerometerUpdateTime;
-  DateTime? _gyroscopeUpdateTime;
-  DateTime? _magnetometerUpdateTime;
-  int? _userAccelerometerLastInterval;
-  final _streamSubscriptions = <StreamSubscription<dynamic>>[];
-  Duration sensorInterval = SensorInterval.normalInterval;
+  // // This whole block can be commented out if we don't want to use phone movement
+  // static const Duration _ignoreDuration = Duration(milliseconds: 50);
+  // UserAccelerometerEvent? _userAccelerometerEvent;
+  // DateTime? _userAccelerometerUpdateTime;
+  // // DateTime? _accelerometerUpdateTime;
+  // // DateTime? _gyroscopeUpdateTime;
+  // // DateTime? _magnetometerUpdateTime;
+  // // ignore: unused_field
+  // int? _userAccelerometerLastInterval;
+  // final _streamSubscriptions = <StreamSubscription<dynamic>>[];
+  // Duration sensorInterval = SensorInterval.normalInterval;
 
   @override
   Widget build(BuildContext context) {
-    maxAmplitude = distance([_userAccelerometerEvent!.x, _userAccelerometerEvent!.y, _userAccelerometerEvent!.z]);
+    // maxAmplitude = distance([_userAccelerometerEvent!.x, _userAccelerometerEvent!.y, _userAccelerometerEvent!.z]);
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -79,7 +82,7 @@ class _WaveAnimationPageState extends State<WaveAnimationPage> with SingleTicker
       width: 300,
       child: Slider(
         value: maxAmplitude,
-        min: 0.01,
+        min: 0.00,
         max: 0.75,
         onChanged: (newValue) {
           setState(() {
@@ -90,74 +93,71 @@ class _WaveAnimationPageState extends State<WaveAnimationPage> with SingleTicker
     );
   }
 
-  // // Completely made this up. There is no purpose to it right now.
-  // Widget _phoneMovement(){
-  //   return Container(
-  //     width: 300,
-  //     onChanged
-  //     distance([_userAccelerometerEvent!.x, _userAccelerometerEvent!.y, _userAccelerometerEvent!.z]
-  //   );
-  // }
-
   double distance(List<double> numbers){
     double totalDistance = 0.0;
     for (int i = 0; i < numbers.length; i++){
       totalDistance = totalDistance + pow(numbers[i], 2);
     }
     totalDistance = sqrt(totalDistance);
-    print(totalDistance);
-    return totalDistance;
+    // print(totalDistance);
+    double newDistance = totalDistance / 20;
+    if (newDistance > 0.75){
+      newDistance = 0.75;
+    }
+
+    return newDistance;
   }
 
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  //new dispose and initState. Comment out and uncomment above ones to revert
   // @override
   // void dispose() {
   //   _controller.dispose();
   //   super.dispose();
+  //   for (final subscription in _streamSubscriptions) {
+  //     subscription.cancel();
+  //   }
   // }
 
-  //new dispose and initState. Comment out and uncomment above ones to revert
-  @override
-  void dispose() {
-    super.dispose();
-    for (final subscription in _streamSubscriptions) {
-      subscription.cancel();
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(vsync: this, duration: Duration(seconds: 2))..repeat();
-    _streamSubscriptions.add(
-      userAccelerometerEventStream(samplingPeriod: sensorInterval).listen(
-        (UserAccelerometerEvent event) {
-          final now = DateTime.now();
-          setState(() {
-            _userAccelerometerEvent = event;
-            if (_userAccelerometerUpdateTime != null) {
-              final interval = now.difference(_userAccelerometerUpdateTime!);
-              if (interval > _ignoreDuration) {
-                _userAccelerometerLastInterval = interval.inMilliseconds;
-              }
-            }
-          });
-          _userAccelerometerUpdateTime = now;
-        },
-        onError: (e) {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return const AlertDialog(
-                  title: Text("Sensor Not Found"),
-                  content: Text(
-                      "It seems that your device doesn't support User Accelerometer Sensor"),
-                );
-              });
-        },
-        cancelOnError: true,
-      ),
-    );
-  }
+//   @override
+//   void initState() {
+//     super.initState();
+//     _controller = AnimationController(vsync: this, duration: Duration(seconds: 2))..repeat();
+//     _streamSubscriptions.add(
+//       userAccelerometerEventStream(samplingPeriod: sensorInterval).listen(
+//         (UserAccelerometerEvent event) {
+//           final now = DateTime.now();
+//           setState(() {
+//             _userAccelerometerEvent = event;
+//             if (_userAccelerometerUpdateTime != null) {
+//               final interval = now.difference(_userAccelerometerUpdateTime!);
+//               if (interval > _ignoreDuration) {
+//                 _userAccelerometerLastInterval = interval.inMilliseconds;
+//               }
+//             }
+//           });
+//           _userAccelerometerUpdateTime = now;
+//         },
+//         onError: (e) {
+//           showDialog(
+//               context: context,
+//               builder: (context) {
+//                 return const AlertDialog(
+//                   title: Text("Sensor Not Found"),
+//                   content: Text(
+//                       "It seems that your device doesn't support User Accelerometer Sensor"),
+//                 );
+//               });
+//         },
+//         cancelOnError: true,
+//       ),
+//     );
+//   }
 }
 
 

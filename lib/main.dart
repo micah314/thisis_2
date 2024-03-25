@@ -51,6 +51,7 @@ class VibratingSection extends StatefulWidget {
 enum DragDirection { up, down }
 
 class _VibratingSectionState extends State<VibratingSection> {
+  // ignore: unused_field
   bool _hasVibrated = false;
   DragDirection? _dragDirection;
   double _boundary1 = 0;
